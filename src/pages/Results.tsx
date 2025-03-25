@@ -1,8 +1,15 @@
-
 import React, { useState } from "react";
 import { Search, Filter } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MatchesList from "@/components/MatchesList";
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from "@/components/ui/pagination";
 
 // Mock data
 const todayResults = [
@@ -163,6 +170,78 @@ const leagues = [
 const Results = () => {
   const [selectedLeague, setSelectedLeague] = useState("All Leagues");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const resultsPerPage = 3;
+
+  const filterResults = (results) => {
+    return results.filter(match => {
+      const matchesSearch = searchQuery === "" || 
+        match.homeTeam.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        match.awayTeam.name.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesLeague = selectedLeague === "All Leagues" || match.league === selectedLeague;
+      
+      return matchesSearch && matchesLeague;
+    });
+  };
+
+  const getPaginatedResults = (results) => {
+    const filteredResults = filterResults(results);
+    const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
+    
+    const validCurrentPage = Math.min(currentPage, totalPages || 1);
+    if (validCurrentPage !== currentPage) {
+      setCurrentPage(validCurrentPage);
+    }
+    
+    const indexOfLastResult = validCurrentPage * resultsPerPage;
+    const indexOfFirstResult = indexOfLastResult - resultsPerPage;
+    
+    return {
+      paginatedResults: filteredResults.slice(indexOfFirstResult, indexOfLastResult),
+      totalPages
+    };
+  };
+
+  const renderPagination = (totalPages) => {
+    if (totalPages <= 1) return null;
+    
+    return (
+      <Pagination className="mt-6">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious 
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
+          </PaginationItem>
+          
+          {[...Array(totalPages)].map((_, index) => (
+            <PaginationItem key={index}>
+              <PaginationLink 
+                isActive={currentPage === index + 1}
+                onClick={() => setCurrentPage(index + 1)}
+                className="cursor-pointer"
+              >
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          
+          <PaginationItem>
+            <PaginationNext 
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
+  };
+
+  const { paginatedResults: todayPaginatedResults, totalPages: todayTotalPages } = getPaginatedResults(todayResults);
+  const { paginatedResults: yesterdayPaginatedResults, totalPages: yesterdayTotalPages } = getPaginatedResults(yesterdayResults);
+  const { paginatedResults: lastWeekPaginatedResults, totalPages: lastWeekTotalPages } = getPaginatedResults(lastWeekResults);
 
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -181,7 +260,10 @@ const Results = () => {
             placeholder="Search for a team..." 
             className="pl-10 w-full px-4 py-2 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
           />
         </div>
         
@@ -189,7 +271,10 @@ const Results = () => {
           <Filter className="h-5 w-5 text-muted-foreground" />
           <select 
             value={selectedLeague}
-            onChange={(e) => setSelectedLeague(e.target.value)}
+            onChange={(e) => {
+              setSelectedLeague(e.target.value);
+              setCurrentPage(1);
+            }}
             className="bg-transparent focus:outline-none"
           >
             {leagues.map((league) => (
@@ -199,7 +284,7 @@ const Results = () => {
         </div>
       </div>
       
-      <Tabs defaultValue="today" className="w-full">
+      <Tabs defaultValue="today" className="w-full" onValueChange={() => setCurrentPage(1)}>
         <TabsList className="mb-8 grid w-full grid-cols-3">
           <TabsTrigger value="today" className="data-[state=active]:shadow-subtle">Today</TabsTrigger>
           <TabsTrigger value="yesterday" className="data-[state=active]:shadow-subtle">Yesterday</TabsTrigger>
@@ -209,22 +294,25 @@ const Results = () => {
         <TabsContent value="today" className="animate-fade-in">
           <MatchesList 
             title="Today's Results" 
-            matches={todayResults} 
+            matches={todayPaginatedResults} 
           />
+          {renderPagination(todayTotalPages)}
         </TabsContent>
         
         <TabsContent value="yesterday" className="animate-fade-in">
           <MatchesList 
             title="Yesterday's Results" 
-            matches={yesterdayResults} 
+            matches={yesterdayPaginatedResults} 
           />
+          {renderPagination(yesterdayTotalPages)}
         </TabsContent>
         
         <TabsContent value="last-week" className="animate-fade-in">
           <MatchesList 
             title="Last Week's Results" 
-            matches={lastWeekResults} 
+            matches={lastWeekPaginatedResults} 
           />
+          {renderPagination(lastWeekTotalPages)}
         </TabsContent>
       </Tabs>
       
