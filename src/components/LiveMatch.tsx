@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Play, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,11 +19,13 @@ interface LiveMatchProps {
   time: string;
   status: "live" | "upcoming" | "completed";
   thumbnail: string;
+  id: string;
   onClick?: () => void;
   className?: string;
 }
 
 const LiveMatch = ({
+  id,
   homeTeam,
   awayTeam,
   league,
@@ -33,6 +36,15 @@ const LiveMatch = ({
   className
 }: LiveMatchProps) => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(`/match/${id}`);
+    }
+  };
   
   return (
     <div 
@@ -40,7 +52,7 @@ const LiveMatch = ({
         "stream-card group cursor-pointer",
         className
       )}
-      onClick={onClick}
+      onClick={handleClick}
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <div className="relative w-full aspect-video overflow-hidden rounded-xl">
@@ -53,9 +65,9 @@ const LiveMatch = ({
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
         
         {status === "live" && (
-          <div className="live-indicator flex items-center gap-1">
-            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse-subtle"></span>
-            LIVE
+          <div className="live-indicator flex items-center gap-1 absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+            <span className="w-2 h-2 bg-white rounded-full animate-pulse-subtle"></span>
+            {t("match.status.live")}
           </div>
         )}
         

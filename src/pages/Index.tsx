@@ -2,6 +2,9 @@
 import React from "react";
 import LiveMatch from "@/components/LiveMatch";
 import MatchesList from "@/components/MatchesList";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 // Mock data for demonstration
 const featuredMatches = [
@@ -145,8 +148,27 @@ const recentMatches = [
 ];
 
 const Index = () => {
+  const { t, language } = useLanguage();
+  const { toast } = useToast();
+  
+  const handleSubscribe = (email: string) => {
+    if (!email || !email.includes('@')) {
+      toast({
+        title: t("notification.error"),
+        description: t("notification.invalidEmail"),
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    toast({
+      title: t("notification.success"),
+      description: t("notification.subscribed"),
+    });
+  };
+  
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8" dir={language === "ar" ? "rtl" : "ltr"}>
       <section className="mb-16 animate-fade-in">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Live & Upcoming Matches</h1>
@@ -157,6 +179,7 @@ const Index = () => {
           {featuredMatches.map((match) => (
             <LiveMatch
               key={match.id}
+              id={match.id}
               homeTeam={match.homeTeam}
               awayTeam={match.awayTeam}
               league={match.league}
@@ -193,10 +216,14 @@ const Index = () => {
               type="email" 
               placeholder="Your email address" 
               className="w-full px-4 py-2 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+              id="email-subscription"
             />
-            <button className="w-full sm:w-auto px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+            <Button 
+              className="w-full sm:w-auto"
+              onClick={() => handleSubscribe((document.getElementById('email-subscription') as HTMLInputElement)?.value)}
+            >
               Subscribe
-            </button>
+            </Button>
           </div>
         </div>
       </section>

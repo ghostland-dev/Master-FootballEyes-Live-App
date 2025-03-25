@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Menu, X, Search, Sun, Moon } from "lucide-react";
+import { Menu, X, Search, Sun, Moon, BellRing } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from "@/ThemeProvider";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useToast } from "@/components/ui/use-toast";
 
 interface NavItem {
   nameKey: string;
@@ -21,12 +23,20 @@ const navItems: NavItem[] = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const location = useLocation();
   const { t, language } = useLanguage();
+  const { theme, setTheme } = useTheme();
+  const { toast } = useToast();
 
   const toggleMenu = () => setIsOpen(!isOpen);
-  const toggleTheme = () => setIsDark(!isDark);
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
+  
+  const showNotification = () => {
+    toast({
+      title: t("notification.newMatch"),
+      description: t("notification.newMatchDescription"),
+    });
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg border-b border-border" dir={language === "ar" ? "rtl" : "ltr"}>
@@ -65,10 +75,17 @@ const Navbar = () => {
           </button>
           <button
             className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
-            onClick={toggleTheme}
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label="Notifications"
+            onClick={showNotification}
           >
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            <BellRing className="h-5 w-5" />
+          </button>
+          <button
+            className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
           <div className="md:hidden">
             <Button 
