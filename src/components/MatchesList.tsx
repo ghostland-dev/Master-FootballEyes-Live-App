@@ -2,6 +2,7 @@
 import React from "react";
 import { Calendar, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TeamProps {
   name: string;
@@ -26,8 +27,10 @@ interface MatchesListProps {
 }
 
 const MatchesList = ({ title, matches, className }: MatchesListProps) => {
+  const { language } = useLanguage();
+  
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-4", className)} dir={language === "ar" ? "rtl" : "ltr"}>
       <div className="flex items-center gap-2">
         <h2 className="text-lg font-semibold">{title}</h2>
         <div className="h-px flex-grow bg-border"></div>

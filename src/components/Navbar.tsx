@@ -4,29 +4,32 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Menu, X, Search, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 interface NavItem {
-  name: string;
+  nameKey: string;
   path: string;
 }
 
 const navItems: NavItem[] = [
-  { name: "Live", path: "/" },
-  { name: "Matches", path: "/matches" },
-  { name: "Calendar", path: "/calendar" },
-  { name: "Results", path: "/results" }
+  { nameKey: "nav.live", path: "/" },
+  { nameKey: "nav.matches", path: "/matches" },
+  { nameKey: "nav.calendar", path: "/calendar" },
+  { nameKey: "nav.results", path: "/results" }
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const location = useLocation();
+  const { t, language } = useLanguage();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg border-b border-border">
+    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg border-b border-border" dir={language === "ar" ? "rtl" : "ltr"}>
       <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="flex items-center space-x-2">
@@ -47,12 +50,13 @@ const Navbar = () => {
                 location.pathname === item.path && "active"
               )}
             >
-              {item.name}
+              {t(item.nameKey)}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center space-x-3">
+          <LanguageSwitcher />
           <button 
             className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
             aria-label="Search"
@@ -95,7 +99,7 @@ const Navbar = () => {
                 )}
                 onClick={() => setIsOpen(false)}
               >
-                {item.name}
+                {t(item.nameKey)}
               </Link>
             ))}
           </div>

@@ -3,6 +3,7 @@ import React from "react";
 import { Play, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TeamProps {
   name: string;
@@ -31,6 +32,8 @@ const LiveMatch = ({
   onClick,
   className
 }: LiveMatchProps) => {
+  const { t, language } = useLanguage();
+  
   return (
     <div 
       className={cn(
@@ -38,6 +41,7 @@ const LiveMatch = ({
         className
       )}
       onClick={onClick}
+      dir={language === "ar" ? "rtl" : "ltr"}
     >
       <div className="relative w-full aspect-video overflow-hidden rounded-xl">
         <img 
@@ -87,7 +91,8 @@ const LiveMatch = ({
           <Button 
             className="w-full bg-primary/90 hover:bg-primary transition-colors group-hover:translate-y-0 translate-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300"
           >
-            <Play className="mr-2 h-4 w-4" /> {status === "live" ? "Watch Now" : "Match Details"}
+            <Play className="mr-2 h-4 w-4" /> 
+            {status === "live" ? t("button.watchNow") : t("button.matchDetails")}
           </Button>
         </div>
       </div>

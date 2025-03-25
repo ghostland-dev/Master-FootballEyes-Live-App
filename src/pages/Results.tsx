@@ -10,8 +10,8 @@ import {
   PaginationNext, 
   PaginationPrevious 
 } from "@/components/ui/pagination";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-// Mock data
 const todayResults = [
   {
     id: "1",
@@ -157,21 +157,22 @@ const lastWeekResults = [
   }
 ];
 
-const leagues = [
-  "All Leagues",
-  "Premier League",
-  "La Liga",
-  "Serie A",
-  "Bundesliga",
-  "Ligue 1",
-  "Champions League"
-];
-
 const Results = () => {
-  const [selectedLeague, setSelectedLeague] = useState("All Leagues");
+  const { t, language } = useLanguage();
+  const [selectedLeague, setSelectedLeague] = useState(t("league.allLeagues"));
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const resultsPerPage = 3;
+
+  const leagues = [
+    t("league.allLeagues"),
+    t("league.premierLeague"),
+    t("league.laLiga"),
+    t("league.serieA"),
+    t("league.bundesliga"),
+    t("league.ligue1"),
+    t("league.championsLeague")
+  ];
 
   const filterResults = (results) => {
     return results.filter(match => {
@@ -244,10 +245,10 @@ const Results = () => {
   const { paginatedResults: lastWeekPaginatedResults, totalPages: lastWeekTotalPages } = getPaginatedResults(lastWeekResults);
 
   return (
-    <div className="container mx-auto px-4 py-8 animate-fade-in">
+    <div className="container mx-auto px-4 py-8 animate-fade-in" dir={language === "ar" ? "rtl" : "ltr"}>
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Match Results</h1>
-        <p className="text-muted-foreground">Check out the latest football match results</p>
+        <h1 className="text-4xl font-bold mb-2">{t("results.title")}</h1>
+        <p className="text-muted-foreground">{t("results.subtitle")}</p>
       </div>
       
       <div className="mb-8 flex flex-col sm:flex-row justify-between gap-4">
@@ -257,7 +258,7 @@ const Results = () => {
           </div>
           <input 
             type="text" 
-            placeholder="Search for a team..." 
+            placeholder={t("search.placeholder")}
             className="pl-10 w-full px-4 py-2 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
             value={searchQuery}
             onChange={(e) => {
@@ -286,14 +287,14 @@ const Results = () => {
       
       <Tabs defaultValue="today" className="w-full" onValueChange={() => setCurrentPage(1)}>
         <TabsList className="mb-8 grid w-full grid-cols-3">
-          <TabsTrigger value="today" className="data-[state=active]:shadow-subtle">Today</TabsTrigger>
-          <TabsTrigger value="yesterday" className="data-[state=active]:shadow-subtle">Yesterday</TabsTrigger>
-          <TabsTrigger value="last-week" className="data-[state=active]:shadow-subtle">Last Week</TabsTrigger>
+          <TabsTrigger value="today" className="data-[state=active]:shadow-subtle">{t("results.today")}</TabsTrigger>
+          <TabsTrigger value="yesterday" className="data-[state=active]:shadow-subtle">{t("results.yesterday")}</TabsTrigger>
+          <TabsTrigger value="last-week" className="data-[state=active]:shadow-subtle">{t("results.lastWeek")}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="today" className="animate-fade-in">
           <MatchesList 
-            title="Today's Results" 
+            title={t("results.todayResults")}
             matches={todayPaginatedResults} 
           />
           {renderPagination(todayTotalPages)}
@@ -301,7 +302,7 @@ const Results = () => {
         
         <TabsContent value="yesterday" className="animate-fade-in">
           <MatchesList 
-            title="Yesterday's Results" 
+            title={t("results.yesterdayResults")}
             matches={yesterdayPaginatedResults} 
           />
           {renderPagination(yesterdayTotalPages)}
@@ -309,7 +310,7 @@ const Results = () => {
         
         <TabsContent value="last-week" className="animate-fade-in">
           <MatchesList 
-            title="Last Week's Results" 
+            title={t("results.lastWeekResults")}
             matches={lastWeekPaginatedResults} 
           />
           {renderPagination(lastWeekTotalPages)}
@@ -317,13 +318,12 @@ const Results = () => {
       </Tabs>
       
       <div className="mt-16 glassmorphism p-8 text-center">
-        <h2 className="text-2xl font-semibold mb-4">Need More Results?</h2>
+        <h2 className="text-2xl font-semibold mb-4">{t("results.needMore")}</h2>
         <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-          Looking for older match results? Access our complete archive of past games, 
-          with detailed statistics and highlights.
+          {t("results.needMoreDesc")}
         </p>
         <button className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors shadow-subtle">
-          Browse Full Archive
+          {t("results.browseArchive")}
         </button>
       </div>
     </div>
