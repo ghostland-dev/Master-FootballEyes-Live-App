@@ -1,69 +1,98 @@
-# Welcome to your Lovable project
 
-## Project info
+# FootballEyesLive
+![alt text](image.png)
 
-**URL**: https://lovable.dev/projects/d8ff6a9b-bfe3-479e-9f2a-6d78fed9298d
+FootballEyesLive is a web application designed for fans to watch live football matches, stay updated on upcoming fixtures, and check out recent results. It offers a sleek and user-friendly interface for live match streaming, match schedules, and more.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **Live Matches**: Watch football matches live with high-quality streams.
+- **Upcoming Matches**: Get details on upcoming matches across different leagues and competitions.
+- **Recent Results**: Check the latest match results from various leagues and competitions.
+- **Match Alerts**: Set up notifications to never miss a match or important events like goals, kick-offs, and key moments.
+- **Multilingual Support**: Available in different languages including English and French.
 
-**Use Lovable**
+## Technologies
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d8ff6a9b-bfe3-479e-9f2a-6d78fed9298d) and start prompting.
+- **Frontend**:
+  - React.js
+  - Tailwind CSS
+  - Lucide React (for icons)
+  - Vite for fast builds
+- **Backend**:
+  - Node.js
+  - REST API (for fetching live data)
+- **Others**:
+  - Vercel for hosting
+  - Unsplash for stock images
 
-Changes made via Lovable will be committed automatically to this repo.
+## Installation
 
-**Use your preferred IDE**
+To run the project locally, follow these steps:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. Navigate to the project directory:
+   ```bash
+   cd FootballEyesLive
+   ```
 
-Follow these steps:
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+The application will be accessible at `http://localhost:8080`.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Configuration
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+Make sure to configure your environment to support the following:
+
+- **Vite**: Make sure your local setup is compatible with Vite.
+- **API Key**: If you are using an external service for live match data, make sure to include your API keys in the `.env` file.
+
+## Screenshots
+
+![FootballEyesLive Screenshot](./assets/screenshot.png)
+
+## Footer Links
+
+- **Quick Links**: 
+  - Live Matches
+  - Upcoming Matches
+  - Results
+  - Calendar
+- **Leagues**:
+  - Premier League
+  - La Liga
+  - Serie A
+  - Bundesliga
+  - Ligue 1
+- **Support**:
+  - FAQ
+  - Contact Us
+  - Privacy Policy
+  - Terms of Service
+
+## Contributing
+
+If you'd like to contribute to the development of FootballEyesLive, feel free to fork the repository and create pull requests with improvements or bug fixes.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Footer
+
 ```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/d8ff6a9b-bfe3-479e-9f2a-6d78fed9298d) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+© 2025 MOUYAHADA Ismail. All rights reserved.
+```
+ 
