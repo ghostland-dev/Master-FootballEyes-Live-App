@@ -1,6 +1,5 @@
 
 # FootballEyesLive
-![alt text](image.png)
 
 FootballEyesLive is a web application designed for fans to watch live football matches, stay updated on upcoming fixtures, and check out recent results. It offers a sleek and user-friendly interface for live match streaming, match schedules, and more.
 
@@ -61,7 +60,7 @@ Make sure to configure your environment to support the following:
 
 ## Screenshots
 
-![FootballEyesLive Screenshot](./assets/screenshot.png)
+![alt text](image.png)
 
 ## Footer Links
 
